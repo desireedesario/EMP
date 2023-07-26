@@ -249,8 +249,6 @@ struct Update {
 	}
 
 	void Run(char c) {
-		//state machine
-		// add "next to treasure"?
 		moveX = 0;
 		moveY = 0;
 		if (c == 'W' || c == 'w') {
@@ -326,9 +324,7 @@ int main() {
 				if (enemy.health > 0) {
 					extraStatus << "Enemy health: " << enemy.health << "\n";
 				}else{
-					enemy.clearFromMap();
 					extraStatus << "Enemy is dead\n";
-					enemy.health = 
 				}
 			}
 		}
@@ -383,10 +379,3 @@ int gameInputExample() {
 
 // Notes
 // endl is new line 
-// how to allocate memory - I want to make a new enemy when the old one gets defeated, while avoiding memory leaks. How do I safely do that? 
-// I would need a state machine to keep track of when I am attacked, when I found an item, etc. 
-// WHat does a state machine look like in a larger game such as WoW or Skyrim? 
-// What class structure do you recommend for keeping track of all the differernt things in the game that can interact wiht eachother? i.e. the character, monster, items that are in an rpg. 
-//next: 
-//	collision detection 
-//	stats and how to build strength 
