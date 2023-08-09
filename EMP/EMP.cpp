@@ -1,214 +1,14 @@
 //the game loop
 #include <iostream>
 #include <sstream>
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+#include <stdlib.h> // srand, rand 
+#include <time.h>   // time 
+#include <conio.h> // For _getch()
 
-#define GAMEMAP_WIDTH 40
-#define GAMEMAP_HEIGHT 16
+#include "Player.h"
+#include "GameMap.h"
+#include "Enemy.h"
 
-
-
-struct GameMap {
-	char tiles[GAMEMAP_WIDTH][GAMEMAP_HEIGHT];
-	int width;
-	int height;
-	GameMap() {
-		int x;
-		int y;
-		width = GAMEMAP_WIDTH;
-		height = GAMEMAP_HEIGHT;
-		for (x = 0; x < width; x++)
-		{
-			for (y = 0; y < height; y++)
-			{
-				tiles[x][y] = '-';
-			}
-		}
-	}
-
-	// use a mathimatical expression to use the vertical down 
-	// game engine: reqad input, process input and something to draw. 
-	// this is the main game loop
-	// 
-	void display()
-	{
-		int x;
-		int y;
-		for (y = 0; y < height; y++) // y-- will print from the top down 
-		{
-			for (x = 0; x < width; x++)
-			{
-				std::cout << tiles[x][y];
-			}
-			std::cout << std::endl;
-		}
-	}
-
-	void clearTile(int x, int y)
-	{
-		if (x >= 0 && x < width && y >= 0 && y < height)
-			tiles[x][y] = '-';
-	}
-};
-
-struct GameEnemy {
-	int health;
-	int x;
-	int y;
-	GameMap* theMap;
-
-	GameEnemy(GameMap* map)
-	{
-		theMap = map;
-		health = 100;
-		x = (rand() % theMap->width);
-		y = (rand() % theMap->height);
-		drawToMap();
-	}
-
-	bool move(int characterX, int characterY)
-	{
-		int newX;
-		int newY;
-		int attack = false;
-		std::cout << "Enemy X: " << x << ", Char X: " << characterX << "\n";
-		// Move enemy x 
-		if (x > characterX)
-		{
-			newX = x - 1;
-		}
-		else if (x < characterX)
-		{
-			newX = x + 1;
-		}
-		else
-		{
-			newX = x;
-		}
-		if (newX >= theMap->width)
-		{
-			newX = theMap->width - 1;
-		}
-
-		if (y > characterY)
-		{
-			newY = y - 1;
-		}
-		else if (y < characterY)
-		{
-			newY = y + 1;
-		}
-		else 
-		{
-			newY = y;
-		}
-		if (newY >= theMap->height)
-		{
-			newY = theMap->height - 1;
-		}
-		if ((newX == characterX) && (newY == characterY))
-		{
-			std::cout << "ATTACK\n";
-			newY = y;
-			newX = x;
-			attack = true;
-		}
-		else
-		{
-			std::cout << "New Enemy Position: " << newX << " " << newY << "\n";
-			clearFromMap();
-			x = newX;
-			y = newY;
-			drawToMap();
-		}
-		return attack;
-	}
-
-	void drawToMap()
-	{
-		theMap->tiles[x][y] = 'M';
-	}
-
-	void clearFromMap()
-	{
-		theMap->clearTile(x, y);
-	}
-
-};
-
-struct GameCharacter {
-	int x;
-	int y;
-	int health;
-	GameMap* theMap;
-
-	GameCharacter(GameMap*map)
-	{
-		x = 0;
-		y = 0;
-		health = 120;
-		theMap = map;
-		drawToMap();
-	}
-
-	bool move(int moveX, int moveY)
-	{
-		int newX = x + moveX;
-		int newY = y + moveY;
-		std::cout << "Should move character to: " << newX << " " << newY << "\n";
-		std::cout << "Moving by: " << moveX << " " << moveY << "\n";
-		std::cout << "Map is " << theMap->width << " " << theMap->height << "\n";
-		if (newX < 0)
-		{
-			std::cout << newX << " < " << theMap->width << "Min width\n";
-			newX = 0;
-		}
-		if (newX >= theMap->width)
-		{
-			newX = theMap->width - 1;
-			std::cout << "max width\n";
-		}
-		if (newY < 0)
-		{
-			newY = 0;
-			std::cout << "Min height\n";
-		}
-		if (newY >= theMap->height)
-		{
-			newY = theMap->height - 1;
-			std::cout << "Max height\n";
-		}
-		bool moved = false;
-		if (newX != x || newY != y)
-		{
-			moved = true;
-			std::cout << "Character moved\n";
-		}
-		else {
-			std::cout << "Character not moved\n";
-		}
-		if (moved)
-		{
-			clearFromMap();
-			x = newX;
-			y = newY;
-			drawToMap();
-		}
-		return moved;
-	}
-
-	// void function do not return values 
-	void clearFromMap()
-	{
-		theMap->clearTile(x, y);
-	}
-
-	void drawToMap()
-	{
-		theMap->tiles[x][y] = '+';
-	}
-};
 
 char readOneCharacter()
 {
@@ -229,8 +29,8 @@ struct Selection {
 		// Get Selection for attacking
 		std::cout << "[W] Go Up" << std::endl;
 		std::cout << "[A] Go Left" << std::endl;
-		std::cout << "[S] Go Right" << std::endl;
-		std::cout << "[D] Go Down\n" << std::endl;
+		std::cout << "[S] Go Down" << std::endl;
+		std::cout << "[D] Go Right\n" << std::endl;
 		std::cout << "[X] Attack" << std::endl;
 		std::cout << "please select: ";
 		return readOneCharacter();
@@ -305,9 +105,14 @@ int main() {
 	Update update;
 	GameMap map;
 	GameCharacter character(&map);
+	// If I don't call this explicitly then the function defined on GameCharacter isn't called
+	// and only the base class function is called.
+	character.initialize();
 	GameEnemy enemy(&map);
 
 	std::ostringstream extraStatus;
+
+	std::cout << character.name << std::endl;
 
 	while (quitGame == false) {
 		extraStatus.str("");
@@ -318,24 +123,26 @@ int main() {
 		if (inAttackRange)
 		{
 			if (enemy.health > 0) {
-				character.health = damage(character.health);
+				character.health.setValue(damage(character.health.value));
 			}
 
 			if (update.attacking) {
 				enemy.health = damage(enemy.health);
 				if (enemy.health > 0) {
 					extraStatus << "Enemy health: " << enemy.health << "\n";
-				}else{
+				}
+				else {
 					enemy.clearFromMap();
 					extraStatus << "Enemy is dead\n";
-					enemy.health = 
+					character.health.offset(10);
+					enemy.initialize();
 				}
 			}
 		}
 		map.display();
 		std::cout << extraStatus.str();
-		std::cout << "Health: " << character.health << "\n";
-		if (character.health == 0)
+		std::cout << "Health: " << character.health.value << "\n";
+		if (character.health.atMin())
 		{
 			death();
 			break;
@@ -380,13 +187,3 @@ int gameInputExample() {
 	return 0;
 };
 
-
-// Notes
-// endl is new line 
-// how to allocate memory - I want to make a new enemy when the old one gets defeated, while avoiding memory leaks. How do I safely do that? 
-// I would need a state machine to keep track of when I am attacked, when I found an item, etc. 
-// WHat does a state machine look like in a larger game such as WoW or Skyrim? 
-// What class structure do you recommend for keeping track of all the differernt things in the game that can interact wiht eachother? i.e. the character, monster, items that are in an rpg. 
-//next: 
-//	collision detection 
-//	stats and how to build strength 

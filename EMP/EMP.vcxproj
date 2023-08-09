@@ -129,8 +129,20 @@
   <ItemGroup>
     <ClCompile Include="EMP.cpp" />
     <ClCompile Include="FileName.cpp" />
+    <ClCompile Include="gamestate.cpp" />
     <ClCompile Include="lessonTwo.cpp" />
     <ClCompile Include="test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="GameActor.h" />
+    <ClInclude Include="GameMap.h" />
+    <ClInclude Include="mymath.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="RunPrefs.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Notes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

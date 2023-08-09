@@ -16,6 +16,9 @@
     <Filter Include="Resource Files\subSection">
       <UniqueIdentifier>{528d155e-31ec-4351-9355-80eb2a4fcc0c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Example Scripts">
+      <UniqueIdentifier>{b4d8ba82-b0c7-4368-9c87-61456a167d80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EMP.cpp">
@@ -24,11 +27,39 @@
     <ClCompile Include="FileName.cpp">
       <Filter>Resource Files\subSection</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="gamestate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lessonTwo.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Example Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>Example Scripts</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameActor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RunPrefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mymath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Notes.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
